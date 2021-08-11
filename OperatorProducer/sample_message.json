@@ -1,0 +1,8 @@
+{
+    "type": "logs",
+    "attributes": {
+        "path": "this/is/a/path",
+        "dateFrom": "20/08/2021",
+        "dateUntil": "20/08/2021"
+    }
+}
