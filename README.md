@@ -17,8 +17,8 @@ The Operator accepts two parameters, one is the routing key which basically is w
     }
 }
 ```
-Example call: `dotnet run -- "clean.logs" {    \"attributes\": {        \"path\": \"this/is/a/path\",        \"dateFrom\": \"08/21/2021 00:00:00\",        \"dateUntil\": \"09/21/2021 00:00:00\"    }}`
-*Given that this call will come from a main application, the call it's not going to look this ugly*
+Example call: `dotnet run -- "clean.logs" {    \"attributes\": {        \"path\": \"this/is/a/path\",        \"dateFrom\": \"08/21/2021 00:00:00\",        \"dateUntil\": \"09/21/2021 00:00:00\"    }}`\
+*Given that this call will come from a main application, the call it's not going to look this ugly in a real world scenario*
 
 ## Media
 Below is the diagram for the program.
