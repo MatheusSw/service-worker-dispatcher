@@ -10,8 +10,8 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/bin/Debug/net5.0/CleanLogsConsumer.dll",
-            "args": [],
+            "program": "${workspaceFolder}/bin/Debug/net5.0/Operator.dll",
+            "args": ["clean.logs","{    \"type\": \"logs\",    \"attributes\": {        \"path\": \"this/is/a/path\",        \"dateFrom\": \"08/21/2021 00:00:00\",        \"dateUntil\": \"08/21/2021 00:00:00\"    }}"],
             "cwd": "${workspaceFolder}",
             // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
             "console": "internalConsole",

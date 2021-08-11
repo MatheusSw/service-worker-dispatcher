@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using RabbitMQ.Client;
@@ -17,6 +18,7 @@ namespace Operator
             return logger;
         }
 
+        //This has been made to only send one message, but it can be easily adapted to send more
         static void Main(string[] args)
         {
             Log.Logger = SetupLogging();
@@ -31,16 +33,22 @@ namespace Operator
                     channel.ExchangeDeclare(exchange: exchangeName,
                         type: "topic");
 
+                    var properties = channel.CreateBasicProperties();
+                    properties.Headers = new Dictionary<string, object>();
+                    //We could also go MessagePack, but why go the trouble
+                    properties.ContentType = "application/json";
+
                     var routingKey = (args.Length > 0) ? args[0] : String.Empty;
+                    properties.Headers.Add("type", routingKey.Split(".")[1]);
 
                     var message = (args.Length > 1) ? args[1] : String.Empty;
-
                     var body = Encoding.UTF8.GetBytes(message);
 
                     channel.BasicPublish(exchange: exchangeName,
                                          routingKey: routingKey,
-                                         basicProperties: null,
+                                         basicProperties: properties,
                                          body: body);
+                    Log.Information("Message sent, exiting.");
                 }
             }
         }

@@ -1,10 +1,11 @@
 ﻿using System;
+using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using Serilog;
 using Serilog.Core;
 
-namespace CleanLogsConsumer
+namespace CleanerConsumer
 {
     class Program
     {
@@ -34,7 +35,7 @@ namespace CleanLogsConsumer
                 {
                     string exchangeName = "topic_work";
                     channel.ExchangeDeclare(exchange: exchangeName, type: "topic");
-                    Log.Debug("Declaring exchange with name {exchangeName}", exchangeName);
+                    Log.Debug($"Declaring exchange with name {exchangeName}");
 
                     var queueName = channel.QueueDeclare().QueueName;
                     channel.QueueBind(queue: queueName,
@@ -47,11 +48,11 @@ namespace CleanLogsConsumer
                     var consumer = new EventingBasicConsumer(channel);
                     consumer.Received += (model, ea) =>
                     {
-                        var body = ea.Body.ToArray();
-                        var logPath = System.Text.Encoding.UTF8.GetString(body);
-                        Log.Information("Received message: {logPath}", logPath);
-
-                        LogCleaner.Clean(path: logPath);
+                        bool success = Dispatcher.DispatchMessage(ea);
+                        if(!success){
+                            Log.Error($"Sending NACK for DeliveryTag ({ea.DeliveryTag})");
+                            channel.BasicNack(ea.DeliveryTag, false, false);
+                        }
                     };
                     channel.BasicConsume(queue: queueName,
                                          autoAck: true,
